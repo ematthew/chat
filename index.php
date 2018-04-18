@@ -1,27 +1,23 @@
 <?php
 
-require('includes/core.inc.php');
+require('includes/database/connect.db.php');
 
 if(isset($_POST['send'])){
-	if(send_msg($_POST['sender'], $_POST['message'])){
+	
+	$sender 	= $_POST['sender'];
+	$message 	= $_POST['message'];
 
-		echo 'Message sent.';
-	} else{
-		echo 'message failed to sent.';
+	$query = " INSERT INTO chat(sender, message) VALUES( '".$sender."', '".$message."' ) ";
+	$run_query = mysqli_query($connection, $query);
+	if(!$run_query){
+		echo 'Fail to insert data inside the database !';
+	}else{
+		echo 'Data has been inserted !';
 	}
+	
+
 }
 ?>
-
-<div id="messages">
-	<?php
-	$messages = get_msg();
-	foreach ($messages as $message) {
-		echo '<strong>'.$message['sender'],'sent</strong><br />';
-		echo $message['message'].'<br /><br />';
-	}
-
-	?>
-</div><!--message-->
 
 <form action="index.php" method="post">
 	<label>Enter Name:<input type="text" name="sender" /></label>
